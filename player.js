@@ -1,29 +1,39 @@
 let hls;
-const proxy = "https://listaiptv38.rafael2019rg.workers.dev/?url=";
 
-function play(url){
+fetch("canais.json")
+.then(r => r.json())
+.then(lista => {
 
-const video = document.getElementById("video");
+const video = document.getElementById("video")
+const canais = document.getElementById("lista")
+
+lista.forEach(c => {
+
+let btn = document.createElement("button")
+btn.innerText = c.name
+
+btn.onclick = () => {
 
 if(hls){
-hls.destroy();
+hls.destroy()
 }
 
-if(Hls.isSupported()){
+if (Hls.isSupported()) {
 
-hls = new Hls();
+hls = new Hls()
+hls.loadSource("https://listaiptv38.rafael2019rg.workers.dev/?url=" + c.url)
+hls.attachMedia(video)
 
-hls.loadSource(proxy + encodeURIComponent(url));
-hls.attachMedia(video);
+} else {
 
-hls.on(Hls.Events.MANIFEST_PARSED,function(){
-video.play();
-});
-
-}else{
-
-video.src = proxy + encodeURIComponent(url);
+video.src = c.url
 
 }
 
 }
+
+canais.appendChild(btn)
+
+})
+
+})
