@@ -1,49 +1,27 @@
-document.addEventListener("DOMContentLoaded", () => {
+<!DOCTYPE html>
+<html>
+<head>
 
-let hls;
-const proxy = "https://player-teste-1.rafael2019rg.workers.dev/?url=";
+<meta charset="UTF-8">
+<title>RG2 TV</title>
 
-fetch("canais.json")
-.then(r => r.json())
-.then(canais => {
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<link rel="stylesheet" href="style.css">
 
-const video = document.getElementById("video")
-const lista = document.getElementById("lista")
+</head>
 
-canais.forEach(c => {
+<body>
 
-const btn = document.createElement("button")
-btn.innerText = c.nome
+<h1>📺 RG2 TV</h1>
 
-btn.onclick = () => {
+<div id="player">
+<video id="video" controls autoplay></video>
+</div>
 
-if(hls){
-hls.destroy()
-}
+<h2>Canais</h2>
+<div id="lista"></div>
 
-if(Hls.isSupported()){
+<script src="player.js"></script>
 
-hls = new Hls()
-
-hls.loadSource(proxy + encodeURIComponent(c.url))
-hls.attachMedia(video)
-
-hls.on(Hls.Events.MANIFEST_PARSED, function(){
-video.play()
-})
-
-}else{
-
-video.src = proxy + encodeURIComponent(c.url)
-
-}
-
-}
-
-lista.appendChild(btn)
-
-})
-
-})
-
-})
+</body>
+</html>
