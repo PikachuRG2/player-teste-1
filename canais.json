@@ -1,10 +1,10 @@
 [
-  {
-    "name": "Globo",
-    "url": "http://gerenciar.vivatele.com:80/viva_padrao/viva2384/1"
-  },
-  {
-    "name": "SBT",
-    "url": "http://gerenciar.vivatele.com:80/viva_padrao/viva2384/2"
-  }
+ {
+  "nome":"Canal 1",
+  "url":"http://gerenciar.vivatele.com:80/viva_padrao/viva2384/1"
+ },
+ {
+  "nome":"Canal 2",
+  "url":"http://gerenciar.vivatele.com:80/viva_padrao/viva2384/2"
+ }
 ]
