@@ -1,5 +1,4 @@
 let hls;
-const proxy = "https://listaiptv38.rafael2019rg.workers.dev/?url=";
 
 fetch("canais.json")
 .then(r => r.json())
@@ -10,29 +9,19 @@ const container = document.getElementById("lista")
 
 lista.forEach(c => {
 
-let btn = document.createElement("button")
+const btn = document.createElement("button")
 btn.innerText = c.nome
 
 btn.onclick = () => {
 
-if(hls){
-hls.destroy()
-}
-
 if(Hls.isSupported()){
+
+if(hls){hls.destroy()}
 
 hls = new Hls()
 
-hls.loadSource(proxy + encodeURIComponent(c.url))
+hls.loadSource("https://listaiptv38.rafael2019rg.workers.dev/?url=" + encodeURIComponent(c.url))
 hls.attachMedia(video)
-
-hls.on(Hls.Events.MANIFEST_PARSED,function(){
-video.play()
-})
-
-}else{
-
-video.src = proxy + encodeURIComponent(c.url)
 
 }
 
