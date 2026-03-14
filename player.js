@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function(){
 
 let hls;
-const proxy = "https://corsproxy.io/?url=";
+const proxy = "https://listaiptv38.rafael2019rg.workers.dev/?url=";
 
 fetch("canais.json")
 .then(r => r.json())
