@@ -1,0 +1,7 @@
+#EXTM3U url-tvg="https://epg.tvnow.best/epg.xml"
+
+#EXTINF:-1 tvg-id="globo.br" tvg-name="Globo" group-title="ABERTOS",Globo
+http://gerenciar.vivatele.com:80/viva_padrao/viva2384/1
+
+#EXTINF:-1 tvg-id="sbt.br" tvg-name="SBT" group-title="ABERTOS",SBT
+http://gerenciar.vivatele.com:80/viva_padrao/viva2384/2
