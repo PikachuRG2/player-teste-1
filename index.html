@@ -5,18 +5,25 @@
 <meta charset="UTF-8">
 <title>RG2 TV</title>
 
-<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-<link rel="stylesheet" href="style.css">
+<link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet"/>
+<script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
 
 </head>
 
-<body>
+<body style="background:#111;color:white;text-align:center">
 
-<header>RG2 TV</header>
+<h1>📺 RG2 TV</h1>
 
-<div id="player">
-<video id="video" controls autoplay></video>
-</div>
+<video
+id="video"
+class="video-js vjs-default-skin"
+controls
+autoplay
+width="800"
+height="450">
+</video>
+
+<br><br>
 
 <div id="lista"></div>
 
