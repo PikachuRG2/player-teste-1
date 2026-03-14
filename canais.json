@@ -1,14 +1,22 @@
 [
- {
-  "nome":"Canal 1",
-  "url":"http://gerenciar.vivatele.com:80/viva_padrao/viva2384/1"
- },
- {
-  "nome":"Canal 2",
-  "url":"http://gerenciar.vivatele.com:80/viva_padrao/viva2384/2"
- },
- {
-  "nome":"Canal Teste",
-  "url":"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
- }
+{"nome":"TV-Ministerio Infantil","url":"https://stmv4.voxtvhd.com.br/1990/1990/playlist.m3u8"},
+{"nome":"TV-Aracati","url":"https://video04.logicahost.com.br/tvaracati/tvaracati/playlist.m3u8"},
+{"nome":"TV-VRT Channel","url":"https://sistemavrt2023.vrtchannel.tv.br:3626/hybrid/play.m3u8"},
+{"nome":"TV-Kuriakos Infantil","url":"https://w2.manasat.com/kkids/smil:kkids.smil/playlist.m3u8"},
+{"nome":"Evangelica-TV-Universal","url":"https://644398c.ha.azioncdn.net/primary/tvuniversal_480p.sdp/playlist.m3u8"},
+{"nome":"TV-Cassic Series","url":"https://stmv1.srvif.com/tvserie/tvserie/playlist.m3u8"},
+{"nome":"Noticias-CNN News","url":"https://d25usgadhphvwi.cloudfront.net/hls/main.m3u8"},
+{"nome":"Noticias-TV Video News","url":"https://video01.logicahost.com.br/tvideonews/tvideonews/chunklist.m3u8"},
+{"nome":"Noticias-4 Por 4","url":"https://video01.soultv.com.br/programa4por4/programa4por4/playlist.m3u8"},
+{"nome":"TV-Camara dos Deputados","url":"https://stream3.camara.gov.br/tv1/manifest.m3u8"},
+{"nome":"TV-Plena","url":"https://cdn.jmvstream.com/w/LVW-9591/LVW9591_PmXtgATnaS/playlist.m3u8"},
+{"nome":"TV-Televisa","url":"https://televisa-televisa-1-it.samsung.wurl.tv/playlist.m3u8"},
+{"nome":"TV-Sony one Classicas","url":"https://spt-sonyoneclassicas-1-br.samsung.wurl.tv/playlist.m3u8"},
+{"nome":"Clips-California Music","url":"https://cmc-cmctv-cineverse.amagi.tv/playlist.m3u8"},
+{"nome":"Clips-TV Osorio","url":"https://stmv1.srvstm.com/demo2573/demo2573/playlist.m3u8"},
+{"nome":"Clips-Com Brasil","url":"https://br5093.streamingdevideo.com.br/abc/abc/master.m3u8"},
+{"nome":"TV-Pai Eterno GO","url":"https://video09.logicahost.com.br/paieterno/paieterno/master.m3u8"},
+{"nome":"TV-Cultura Catéve Rp","url":"https://5b33b873179a2.streamlock.net:1443/live/livestream/playlist.m3u8"},
+{"nome":"TV-MY Time","url":"https://appletree-mytime-samsungbrazil.amagi.tv/playlist720p.m3u8"},
+{"nome":"TV-I Ficção","url":"https://video-auth2.iol.pt/live_tvi_ficcao/live_tvi_ficcao/edge_servers/tvificcao-720p/playlist.m3u8"}
 ]
