@@ -1,51 +1,47 @@
-document.addEventListener("DOMContentLoaded", function(){
+document.addEventListener("DOMContentLoaded", () => {
 
-let hls;
-const proxy = "player-teste-1.rafael2019rg.workers.dev/?url=";
+const video = document.getElementById("video")
+const lista = document.getElementById("lista")
+
+let hls
 
 fetch("canais.json")
 .then(r => r.json())
-.then(lista => {
+.then(canais => {
 
-const video = document.getElementById("video");
-const container = document.getElementById("lista");
+canais.forEach(c => {
 
-lista.forEach(c => {
+const btn = document.createElement("button")
+btn.innerText = c.nome
 
-let btn = document.createElement("button");
-btn.innerText = c.nome;
-
-btn.onclick = function(){
+btn.onclick = () => {
 
 if(hls){
-hls.destroy();
+hls.destroy()
 }
 
 if(Hls.isSupported()){
 
-hls = new Hls();
+hls = new Hls()
+hls.loadSource(c.url)
+hls.attachMedia(video)
 
-hls.loadSource(proxy + encodeURIComponent(c.url));
-hls.attachMedia(video);
-hls.on(Hls.Events.ERROR, function(event, data) {
-  console.log("HLS ERROR:", data);
-});
-hls.on(Hls.Events.MANIFEST_PARSED,function(){
-video.play();
-});
+hls.on(Hls.Events.MANIFEST_PARSED, () => {
+video.play()
+})
 
 }else{
 
-video.src = proxy + encodeURIComponent(c.url);
+video.src = c.url
 
 }
 
-};
+}
 
-container.appendChild(btn);
+lista.appendChild(btn)
 
-});
+})
 
-});
+})
 
-});
+})
