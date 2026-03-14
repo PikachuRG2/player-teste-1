@@ -1,35 +1,18 @@
-fetch('https://corsproxy.io/?key=6c262b95&url=https://player-teste-1.vercel.app/canais.json')
-.then(r => r.json())
-.then(lista => {
+let hls;
 
-const video = document.getElementById("video")
-const canais = document.getElementById("canais")
+function play(url){
+  const video = document.getElementById("video");
+  const proxy = "https://listaiptv38.rafael2019rg.workers.dev/?url=";
 
-lista.forEach(c => {
+  if(hls){
+    hls.destroy();
+  }
 
-let btn = document.createElement("button")
-btn.innerText = c.name
-
-btn.onclick = () => {
-
-if (Hls.isSupported()) {
-
-let hls = new Hls()
-
-hls.loadSource("https://corsproxy.io/?url=" + c.url)
-
-hls.attachMedia(video)
-
-} else {
-
-video.src = c.url
-
+  if(Hls.isSupported()){
+    hls = new Hls();
+    hls.loadSource(proxy + encodeURIComponent(url));
+    hls.attachMedia(video);
+  }else{
+    video.src = proxy + encodeURIComponent(url);
+  }
 }
-
-}
-
-canais.appendChild(btn)
-
-})
-
-})
