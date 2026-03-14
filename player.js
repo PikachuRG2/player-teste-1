@@ -1,4 +1,4 @@
-fetch('https://corsproxy.io/?url=https://player-teste-1.vercel.app/canais.json')
+fetch('https://corsproxy.io/?key=6c262b95&url=https://player-teste-1.vercel.app/canais.json')
 .then(r => r.json())
 .then(lista => {
 
