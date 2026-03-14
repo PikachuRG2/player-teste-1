@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function(){
 
 let hls;
-const proxy = "https://listaiptv38.rafael2019rg.workers.dev/?url=";
+const proxy = "player-teste-1.rafael2019rg.workers.dev/?url=";
 
 fetch("canais.json")
 .then(r => r.json())
