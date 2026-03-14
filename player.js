@@ -1,33 +1,32 @@
 fetch("canais.json")
-.then(r=>r.json())
-.then(canais=>{
+.then(res=>res.json())
+.then(lista=>{
 
-let lista = document.getElementById("lista")
+const video = document.getElementById("video")
+const canais = document.getElementById("lista")
 
-canais.forEach(c=>{
+lista.forEach(canal=>{
 
 let btn = document.createElement("button")
-btn.innerText = c.name
+btn.innerText = canal.name
 
 btn.onclick = ()=>{
 
-let video = document.getElementById("video")
-
 if(Hls.isSupported()){
 
-let hls = new Hls()
-hls.loadSource(c.url)
+const hls = new Hls()
+hls.loadSource(canal.url)
 hls.attachMedia(video)
 
 }else{
 
-video.src = c.url
+video.src = canal.url
 
 }
 
 }
 
-lista.appendChild(btn)
+canais.appendChild(btn)
 
 })
 
