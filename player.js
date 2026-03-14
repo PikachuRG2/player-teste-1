@@ -1,10 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-let hls;
-const proxy = "/api/proxy?url=";
-
-const video = document.getElementById("video");
-const lista = document.getElementById("lista");
+const player = videojs("video")
+const lista = document.getElementById("lista")
 
 fetch("canais.json")
 .then(r => r.json())
@@ -12,38 +9,24 @@ fetch("canais.json")
 
 canais.forEach(c => {
 
-const btn = document.createElement("button");
-btn.innerText = c.nome;
+const btn = document.createElement("button")
+btn.innerText = c.nome
 
 btn.onclick = () => {
 
-if(hls){
-hls.destroy();
-}
+player.src({
+src: c.url,
+type: "application/x-mpegURL"
+})
 
-if(Hls.isSupported()){
-
-hls = new Hls();
-hls.loadSource(proxy + encodeURIComponent(c.url));
-hls.attachMedia(video);
-
-hls.on(Hls.Events.MANIFEST_PARSED, () => {
-video.play();
-});
-
-}else{
-
-video.src = proxy + encodeURIComponent(c.url);
+player.play()
 
 }
 
-};
-
-lista.appendChild(btn);
-
-});
+lista.appendChild(btn)
 
 })
-.catch(err => console.log("Erro canais:", err));
 
-});
+})
+
+})
