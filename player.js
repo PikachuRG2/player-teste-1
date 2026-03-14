@@ -1,55 +1,47 @@
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", () => {
 
-const lista = document.getElementById("lista");
-const video = document.getElementById("video");
+const video = document.getElementById("video")
+const lista = document.getElementById("lista")
 
-if(!lista){
-console.error("DIV lista não encontrada");
-return;
-}
-
-let hls;
+let hls
 
 fetch("canais.json")
-.then(res => res.json())
+.then(r => r.json())
 .then(canais => {
 
-console.log("Canais carregados:", canais);
+canais.forEach(c => {
 
-canais.forEach(canal => {
-
-const btn = document.createElement("button");
-btn.innerText = canal.nome;
+const btn = document.createElement("button")
+btn.innerText = c.nome
 
 btn.onclick = () => {
 
 if(hls){
-hls.destroy();
+hls.destroy()
 }
-
-const url = canal.url;
 
 if(Hls.isSupported()){
 
-hls = new Hls();
-hls.loadSource(url);
-hls.attachMedia(video);
+hls = new Hls()
+hls.loadSource(c.url)
+hls.attachMedia(video)
+
+hls.on(Hls.Events.MANIFEST_PARSED, () => {
+video.play()
+})
 
 }else{
 
-video.src = url;
+video.src = c.url
 
 }
 
-};
+}
 
-lista.appendChild(btn);
-
-});
+lista.appendChild(btn)
 
 })
-.catch(err => {
-console.error("Erro ao carregar canais:", err);
-});
 
-});
+})
+
+})
