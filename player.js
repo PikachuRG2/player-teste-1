@@ -1,32 +1,41 @@
+let hls
+
 fetch("canais.json")
-.then(res=>res.json())
-.then(lista=>{
+.then(r=>r.json())
+.then(canais=>{
 
+const lista = document.getElementById("canais")
 const video = document.getElementById("video")
-const canais = document.getElementById("lista")
 
-lista.forEach(canal=>{
+canais.forEach(c=>{
 
 let btn = document.createElement("button")
-btn.innerText = canal.name
+btn.innerText = c.name
 
-btn.onclick = ()=>{
+btn.onclick=()=>{
+
+if(hls){
+hls.destroy()
+}
 
 if(Hls.isSupported()){
 
-const hls = new Hls()
-hls.loadSource(canal.url)
+hls = new Hls({
+liveSyncDurationCount:3
+})
+
+hls.loadSource(c.url)
 hls.attachMedia(video)
 
 }else{
 
-video.src = canal.url
+video.src=c.url
 
 }
 
 }
 
-canais.appendChild(btn)
+lista.appendChild(btn)
 
 })
 
