@@ -3,6 +3,8 @@ let hls;
 function play(url){
   const video = document.getElementById("video");
   const proxy = "https://listaiptv38.rafael2019rg.workers.dev/?url=";
+  
+  hls.loadSource(proxy + encodeURIComponent(c.url));
 
   if(hls){
     hls.destroy();
