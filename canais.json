@@ -1,14 +1,10 @@
 [
 {
 "name":"Globo",
-"url":"http://gerenciar.vivatele.com:80/viva_padrao/viva2384/1"
+"url":"https://corsproxy.io/?http://gerenciar.vivatele.com:80/viva_padrao/viva2384/1"
 },
 {
 "name":"SBT",
-"url":"http://gerenciar.vivatele.com:80/viva_padrao/viva2384/2"
-},
-{
-"name":"Band",
-"url":"http://gerenciar.vivatele.com:80/viva_padrao/viva2384/3"
+"url":"https://corsproxy.io/?http://gerenciar.vivatele.com:80/viva_padrao/viva2384/2"
 }
 ]
