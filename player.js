@@ -1,27 +1,55 @@
-<!DOCTYPE html>
-<html>
-<head>
+document.addEventListener("DOMContentLoaded", function () {
 
-<meta charset="UTF-8">
-<title>RG2 TV</title>
+const lista = document.getElementById("lista");
+const video = document.getElementById("video");
 
-<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-<link rel="stylesheet" href="style.css">
+if(!lista){
+console.error("DIV lista não encontrada");
+return;
+}
 
-</head>
+let hls;
 
-<body>
+fetch("canais.json")
+.then(res => res.json())
+.then(canais => {
 
-<h1>📺 RG2 TV</h1>
+console.log("Canais carregados:", canais);
 
-<div id="player">
-<video id="video" controls autoplay></video>
-</div>
+canais.forEach(canal => {
 
-<h2>Canais</h2>
-<div id="lista"></div>
+const btn = document.createElement("button");
+btn.innerText = canal.nome;
 
-<script src="player.js"></script>
+btn.onclick = () => {
 
-</body>
-</html>
+if(hls){
+hls.destroy();
+}
+
+const url = canal.url;
+
+if(Hls.isSupported()){
+
+hls = new Hls();
+hls.loadSource(url);
+hls.attachMedia(video);
+
+}else{
+
+video.src = url;
+
+}
+
+};
+
+lista.appendChild(btn);
+
+});
+
+})
+.catch(err => {
+console.error("Erro ao carregar canais:", err);
+});
+
+});
