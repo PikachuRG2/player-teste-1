@@ -1,13 +1,14 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-const video = document.getElementById("video")
-const lista = document.getElementById("lista")
-
-let hls
+let hls;
+const proxy = "const proxy = "/api/proxy?url=";
 
 fetch("canais.json")
 .then(r => r.json())
 .then(canais => {
+
+const video = document.getElementById("video")
+const lista = document.getElementById("lista")
 
 canais.forEach(c => {
 
@@ -23,16 +24,17 @@ hls.destroy()
 if(Hls.isSupported()){
 
 hls = new Hls()
-hls.loadSource(c.url)
+
+hls.loadSource(proxy + encodeURIComponent(c.url))
 hls.attachMedia(video)
 
-hls.on(Hls.Events.MANIFEST_PARSED, () => {
+hls.on(Hls.Events.MANIFEST_PARSED, function(){
 video.play()
 })
 
 }else{
 
-video.src = c.url
+video.src = proxy + encodeURIComponent(c.url)
 
 }
 
