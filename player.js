@@ -27,7 +27,9 @@ hls = new Hls();
 
 hls.loadSource(proxy + encodeURIComponent(c.url));
 hls.attachMedia(video);
-
+hls.on(Hls.Events.ERROR, function(event, data) {
+  console.log("HLS ERROR:", data);
+});
 hls.on(Hls.Events.MANIFEST_PARSED,function(){
 video.play();
 });
