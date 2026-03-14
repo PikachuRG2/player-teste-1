@@ -1,41 +1,34 @@
-let hls
+fetch('https://corsproxy.io/?url=https://seusite.com/canais.json')
+.then(r => r.json())
+.then(lista => {
 
-fetch("canais.json")
-.then(r=>r.json())
-.then(canais=>{
-
-const lista = document.getElementById("canais")
 const video = document.getElementById("video")
+const canais = document.getElementById("canais")
 
-canais.forEach(c=>{
+lista.forEach(c => {
 
 let btn = document.createElement("button")
 btn.innerText = c.name
 
-btn.onclick=()=>{
+btn.onclick = () => {
 
-if(hls){
-hls.destroy()
-}
+if (Hls.isSupported()) {
 
-if(Hls.isSupported()){
+let hls = new Hls()
 
-hls = new Hls({
-liveSyncDurationCount:3
-})
+hls.loadSource("https://corsproxy.io/?url=" + c.url)
 
-hls.loadSource(c.url)
 hls.attachMedia(video)
 
-}else{
+} else {
 
-video.src=c.url
-
-}
+video.src = c.url
 
 }
 
-lista.appendChild(btn)
+}
+
+canais.appendChild(btn)
 
 })
 
