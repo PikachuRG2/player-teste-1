@@ -6,5 +6,9 @@
  {
   "nome":"Canal 2",
   "url":"http://gerenciar.vivatele.com:80/viva_padrao/viva2384/2"
+ },
+ {
+  "nome":"Canal Teste",
+  "url":"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
  }
 ]
