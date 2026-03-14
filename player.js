@@ -2,6 +2,7 @@ let hls;
 
 function play(url){
   const video = document.getElementById("video");
+  const canais = document.getElementById("canais")
   const proxy = "https://listaiptv38.rafael2019rg.workers.dev/?url=";
   
   hls.loadSource(proxy + encodeURIComponent(c.url));
