@@ -1,33 +1,321 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle de Quartos - Porteiro</title>
+    <style>
+        /* Estilo global */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #1e1e1e; /* Fundo escuro */
+            color: #fff; /* Texto branco */
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-<meta charset="UTF-8">
-<title>RG2 TV</title>
+        .container {
+            width: 90%;
+            margin: 30px auto;
+            padding: 20px;
+        }
 
-<link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet"/>
-<script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script>
+        h1 {
+            text-align: center;
+            color: #FF9800; /* Laranja vibrante */
+            margin-bottom: 30px;
+            font-size: 32px;
+        }
 
+        /* Estilo do botão de editar quartos */
+        .edit-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #FF9800; /* Cor de destaque */
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            font-size: 18px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .edit-button:hover {
+            background-color: #FF5722; /* Cor de fundo quando hover */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Estilo do filtro de quartos */
+        .filter-container {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .filter-container select {
+            padding: 12px;
+            font-size: 16px;
+            margin-right: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            background-color: #333;
+            color: white;
+        }
+
+        .filter-container label {
+            color: #FF9800;
+            font-size: 18px;
+        }
+
+        /* Estilo da lista de quartos */
+        .room-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            grid-auto-rows: 250px;
+        }
+
+        .quarto {
+            background: #292929; /* Cor de fundo do quarto */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+        }
+
+        .quarto:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .quarto h3 {
+            margin: 0;
+            font-size: 24px;
+            color: #FF9800; /* Cor do título */
+            font-weight: bold;
+        }
+
+        .info-quarto {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-bottom: 15px;
+            font-size: 16px;
+            color: #ddd;
+        }
+
+        .status {
+            margin-top: auto;
+        }
+
+        .status button {
+            padding: 12px 25px;
+            background-color: #4CAF50; /* Cor padrão (verde) */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-size: 16px;
+            width: 100%;
+        }
+
+        .status button.ocupado {
+            background-color: #f44336; /* Cor vermelha para "ocupado" */
+        }
+
+        .status button:hover {
+            background-color: #45a049;
+        }
+
+        /* Estilo para a página de edição */
+        .edit-room-form {
+            display: none;
+            background-color: #292929;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+            position: absolute;
+            top: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            z-index: 100;
+        }
+
+        .edit-room-form input, .edit-room-form select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            background-color: #333;
+            color: white;
+        }
+
+        .edit-room-form button {
+            padding: 12px 20px;
+            background-color: #FF9800;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+
+        .edit-room-form button:hover {
+            background-color: #FF5722;
+        }
+    </style>
 </head>
+<body>
+    <div class="container">
+        <h1>Controle de Quartos - Hotel</h1>
 
-<body style="background:#111;color:white;text-align:center">
+        <!-- Filtro de Quartos -->
+        <div class="filter-container">
+            <label for="filterBeds">Filtrar por configuração de camas:</label>
+            <select id="filterBeds" onchange="applyFilter()">
+                <option value="all">Todos</option>
+                <option value="2 camas de casal e 1 cama de solteiro">2 camas de casal e 1 cama de solteiro</option>
+                <option value="1 cama de casal e 1 cama de solteiro">1 cama de casal e 1 cama de solteiro</option>
+                <option value="4 camas de solteiro">4 camas de solteiro</option>
+                <option value="2 camas de casal">2 camas de casal</option>
+                <option value="2 de cada">2 de cada (1 de casal e 1 de solteiro)</option>
+            </select>
+        </div>
 
-<h1>📺 RG2 TV</h1>
+        <!-- Lista de Quartos -->
+        <div class="room-list" id="roomList">
+            <!-- Exemplo de quarto, 25 quartos serão gerados dinamicamente -->
+        </div>
 
-<video
-id="video"
-class="video-js vjs-default-skin"
-controls
-autoplay
-width="800"
-height="450">
-</video>
+        <!-- Botão de Editar Quartos -->
+        <button class="edit-button" onclick="showEditForm()">Editar Quartos</button>
+    </div>
 
-<br><br>
+    <!-- Formulário de Edição de Quarto -->
+    <div class="edit-room-form" id="editRoomForm">
+        <h3>Editar Quarto</h3>
+        <label for="roomNumber">Número do Quarto:</label>
+        <input type="number" id="roomNumber" placeholder="Número do Quarto" />
 
-<div id="lista"></div>
+        <label for="beds">Configuração das Camas:</label>
+        <select id="beds">
+            <option value="2 camas de casal e 1 cama de solteiro">2 camas de casal e 1 cama de solteiro</option>
+            <option value="1 cama de casal e 1 cama de solteiro">1 cama de casal e 1 cama de solteiro</option>
+            <option value="4 camas de solteiro">4 camas de solteiro</option>
+            <option value="2 camas de casal">2 camas de casal</option>
+            <option value="2 de cada">2 de cada (1 de casal e 1 de solteiro)</option>
+        </select>
 
-<script src="player.js"></script>
+        <label for="airConditioning">Ventilador ou Ar-condicionado:</label>
+        <select id="airConditioning">
+            <option value="ventilador">Ventilador</option>
+            <option value="ar-condicionado">Ar-condicionado</option>
+        </select>
 
+        <button onclick="saveRoom()">Salvar</button>
+        <button onclick="hideEditForm()">Cancelar</button>
+    </div>
+
+    <script>
+        // Carregar dados do localStorage ou criar novo
+        const rooms = JSON.parse(localStorage.getItem('rooms')) || Array.from({ length: 25 }, (_, index) => ({
+            id: index + 1,
+            roomNumber: index + 1, // Números dos quartos de 1 a 25
+            beds: '2 camas de casal e 1 cama de solteiro', // Configuração inicial
+            airConditioning: 'ventilador',
+            status: 'disponível'
+        }));
+
+        let editingRoom = null; // Para saber qual quarto está sendo editado
+
+        // Função para exibir os quartos na página
+        function displayRooms(filteredRooms = rooms) {
+            const roomList = document.getElementById('roomList');
+            roomList.innerHTML = ''; // Limpar quartos existentes
+
+            filteredRooms.forEach(room => {
+                if (room.status !== 'ocupado') { // Ignorar quartos ocupados no filtro
+                    const roomElement = document.createElement('div');
+                    roomElement.classList.add('quarto');
+                    roomElement.innerHTML = `
+                        <h3>Quarto ${room.roomNumber}</h3>
+                        <div class="info-quarto">
+                            <div>Configuração de Camas: ${room.beds}</div>
+                            <div>${room.airConditioning}</div>
+                        </div>
+                        <div class="status">
+                            <button class="${room.status === 'ocupado' ? 'ocupado' : ''}" onclick="toggleStatus(${room.id}, this)">
+                                ${room.status === 'disponível' ? 'Disponível' : 'Ocupado'}
+                            </button>
+                        </div>
+                    `;
+                    roomList.appendChild(roomElement);
+                }
+            });
+        }
+
+        // Alternar o status do quarto
+        function toggleStatus(roomId, button) {
+            const room = rooms.find(r => r.id === roomId);
+            room.status = room.status === 'disponível' ? 'ocupado' : 'disponível';
+            button.classList.toggle('ocupado');
+            button.innerText = room.status === 'disponível' ? 'Disponível' : 'Ocupado';
+            saveRooms(); // Salvar no localStorage após alteração
+        }
+
+        // Mostrar o formulário de edição
+        function showEditForm() {
+            document.getElementById('editRoomForm').style.display = 'block';
+        }
+
+        // Esconder o formulário de edição
+        function hideEditForm() {
+            document.getElementById('editRoomForm').style.display = 'none';
+        }
+
+        // Salvar as alterações no quarto
+        function saveRoom() {
+            const roomNumber = document.getElementById('roomNumber').value;
+            const beds = document.getElementById('beds').value;
+            const airConditioning = document.getElementById('airConditioning').value;
+
+            // Atualizar o quarto
+            const room = rooms.find(r => r.roomNumber == roomNumber);
+            room.beds = beds;
+            room.airConditioning = airConditioning;
+
+            hideEditForm();
+            displayRooms(); // Recarregar os quartos
+            saveRooms(); // Salvar no localStorage após edição
+        }
+
+        // Salvar os quartos no localStorage
+        function saveRooms() {
+            localStorage.setItem('rooms', JSON.stringify(rooms));
+        }
+
+        // Função para aplicar o filtro
+        function applyFilter() {
+            const filterValue = document.getElementById('filterBeds').value;
+            const filteredRooms = filterValue === 'all'
+                ? rooms
+                : rooms.filter(room => room.beds === filterValue);
+
+            displayRooms(filteredRooms); // Exibir quartos filtrados
+        }
+
+        // Inicializar a página com os quartos
+        displayRooms();
+    </script>
 </body>
 </html>
