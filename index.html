@@ -173,6 +173,28 @@
         .edit-room-form button:hover {
             background-color: #FF5722;
         }
+
+        /* Estilo para a seção de "Quartos Ocupados" */
+        .occuppied-room-button {
+            margin-top: 30px;
+            padding: 10px 20px;
+            background-color: #FF5722;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .occuppied-room-button:hover {
+            background-color: #f44336;
+        }
+
+        .occuppied-room-container {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -199,36 +221,46 @@
             <!-- Quartos disponíveis serão listados aqui -->
         </div>
 
-        <!-- Botão de Editar Quartos -->
-        <button class="edit-button" onclick="showEditForm()">Editar Quartos</button>
+        <!-- Botão para mostrar quartos ocupados -->
+        <button class="occuppied-room-button" onclick="toggleOccupiedRooms()">Quartos Ocupados</button>
 
-        <!-- Formulário de Edição de Quarto -->
-        <div class="edit-room-form" id="editRoomForm">
-            <h3>Editar Quarto</h3>
-            <label for="roomNumber">Número do Quarto:</label>
-            <input type="number" id="roomNumber" placeholder="Número do Quarto" />
-
-            <label for="beds">Configuração das Camas:</label>
-            <select id="beds">
-                <option value="2 camas de casal e 1 cama de solteiro">2 camas de casal e 1 cama de solteiro</option>
-                <option value="1 cama de casal e 1 cama de solteiro">1 cama de casal e 1 cama de solteiro</option>
-                <option value="4 camas de solteiro">4 camas de solteiro</option>
-                <option value="2 camas de casal">2 camas de casal</option>
-                <option value="2 de cada">2 de cada (1 de casal e 1 de solteiro)</option>
-                <option value="1 cama de casal">1 cama de casal</option>
-                <option value="1 cama de solteiro">1 cama de solteiro</option>
-            </select>
-
-            <label for="airConditioning">Ventilador ou Ar-condicionado:</label>
-            <select id="airConditioning">
-                <option value="ventilador">Ventilador</option>
-                <option value="ar-condicionado">Ar-condicionado</option>
-            </select>
-
-            <button onclick="saveRoom()">Salvar</button>
-            <button onclick="hideEditForm()">Cancelar</button>
+        <!-- Lista de Quartos Ocupados -->
+        <div class="occuppied-room-container" id="occupiedRoomContainer">
+            <h2>Quartos Ocupados</h2>
+            <div class="room-list" id="occupiedRoomList">
+                <!-- Quartos ocupados serão listados aqui -->
+            </div>
         </div>
 
+        <!-- Botão de Editar Quartos -->
+        <button class="edit-button" onclick="showEditForm()">Editar Quartos</button>
+    </div>
+
+    <!-- Formulário de Edição de Quarto -->
+    <div class="edit-room-form" id="editRoomForm">
+        <h3>Editar Quarto</h3>
+        <label for="roomNumber">Número do Quarto:</label>
+        <input type="number" id="roomNumber" placeholder="Número do Quarto" />
+
+        <label for="beds">Configuração das Camas:</label>
+        <select id="beds">
+            <option value="2 camas de casal e 1 cama de solteiro">2 camas de casal e 1 cama de solteiro</option>
+            <option value="1 cama de casal e 1 cama de solteiro">1 cama de casal e 1 cama de solteiro</option>
+            <option value="4 camas de solteiro">4 camas de solteiro</option>
+            <option value="2 camas de casal">2 camas de casal</option>
+            <option value="2 de cada">2 de cada (1 de casal e 1 de solteiro)</option>
+            <option value="1 cama de casal">1 cama de casal</option>
+            <option value="1 cama de solteiro">1 cama de solteiro</option>
+        </select>
+
+        <label for="airConditioning">Ventilador ou Ar-condicionado:</label>
+        <select id="airConditioning">
+            <option value="ventilador">Ventilador</option>
+            <option value="ar-condicionado">Ar-condicionado</option>
+        </select>
+
+        <button onclick="saveRoom()">Salvar</button>
+        <button onclick="hideEditForm()">Cancelar</button>
     </div>
 
     <script>
@@ -249,6 +281,34 @@
             roomList.innerHTML = ''; // Limpar quartos existentes
 
             filteredRooms.forEach(room => {
+                if (room.status !== 'ocupado') { // Ignorar quartos ocupados
+                    const roomElement = document.createElement('div');
+                    roomElement.classList.add('quarto');
+                    roomElement.innerHTML = `
+                        <h3>Quarto ${room.roomNumber}</h3>
+                        <div class="info-quarto">
+                            <div>Configuração de Camas: ${room.beds}</div>
+                            <div>${room.airConditioning}</div>
+                        </div>
+                        <div class="status">
+                            <button class="${room.status === 'ocupado' ? 'ocupado' : ''}" onclick="toggleStatus(${room.id}, this)">
+                                ${room.status === 'disponível' ? 'Disponível' : 'Ocupado'}
+                            </button>
+                        </div>
+                    `;
+                    roomList.appendChild(roomElement);
+                }
+            });
+        }
+
+        // Exibir quartos ocupados
+        function displayOccupiedRooms() {
+            const occupiedRoomList = document.getElementById('occupiedRoomList');
+            occupiedRoomList.innerHTML = ''; // Limpar quartos ocupados existentes
+
+            const occupiedRooms = rooms.filter(room => room.status === 'ocupado');
+
+            occupiedRooms.forEach(room => {
                 const roomElement = document.createElement('div');
                 roomElement.classList.add('quarto');
                 roomElement.innerHTML = `
@@ -258,13 +318,33 @@
                         <div>${room.airConditioning}</div>
                     </div>
                     <div class="status">
-                        <button class="${room.status === 'ocupado' ? 'ocupado' : ''}" onclick="toggleStatus(${room.id}, this)">
-                            ${room.status === 'disponível' ? 'Disponível' : 'Ocupado'}
+                        <button class="ocupado" onclick="toggleStatus(${room.id}, this)">
+                            Ocupado
                         </button>
                     </div>
                 `;
-                roomList.appendChild(roomElement);
+                occupiedRoomList.appendChild(roomElement);
             });
+        }
+
+        // Alternar status de disponível para ocupado e vice-versa
+        function toggleStatus(roomId, button) {
+            const room = rooms.find(r => r.id === roomId);
+            room.status = room.status === 'disponível' ? 'ocupado' : 'disponível';
+            button.classList.toggle('ocupado');
+            button.innerText = room.status === 'disponível' ? 'Disponível' : 'Ocupado';
+            saveRooms(); // Salvar no localStorage após alteração
+        }
+
+        // Exibir ou ocultar os quartos ocupados
+        function toggleOccupiedRooms() {
+            const occupiedRoomContainer = document.getElementById('occupiedRoomContainer');
+            if (occupiedRoomContainer.style.display === 'block') {
+                occupiedRoomContainer.style.display = 'none';
+            } else {
+                occupiedRoomContainer.style.display = 'block';
+                displayOccupiedRooms(); // Exibir quartos ocupados
+            }
         }
 
         // Mostrar o formulário de edição
