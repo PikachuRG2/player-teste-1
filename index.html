@@ -173,6 +173,28 @@
         .edit-room-form button:hover {
             background-color: #FF5722;
         }
+
+        /* Estilo para a seção de "Quartos Ocupados" */
+        .occuppied-room-button {
+            margin-top: 30px;
+            padding: 10px 20px;
+            background-color: #FF5722;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .occuppied-room-button:hover {
+            background-color: #f44336;
+        }
+
+        .occuppied-room-container {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -189,12 +211,25 @@
                 <option value="4 camas de solteiro">4 camas de solteiro</option>
                 <option value="2 camas de casal">2 camas de casal</option>
                 <option value="2 de cada">2 de cada (1 de casal e 1 de solteiro)</option>
+                <option value="1 cama de casal">1 cama de casal</option>
+                <option value="1 cama de solteiro">1 cama de solteiro</option>
             </select>
         </div>
 
-        <!-- Lista de Quartos -->
+        <!-- Lista de Quartos Disponíveis -->
         <div class="room-list" id="roomList">
-            <!-- Exemplo de quarto, 25 quartos serão gerados dinamicamente -->
+            <!-- Quartos disponíveis serão listados aqui -->
+        </div>
+
+        <!-- Botão para mostrar quartos ocupados -->
+        <button class="occuppied-room-button" onclick="toggleOccupiedRooms()">Quartos Ocupados</button>
+
+        <!-- Lista de Quartos Ocupados -->
+        <div class="occuppied-room-container" id="occupiedRoomContainer">
+            <h2>Quartos Ocupados</h2>
+            <div class="room-list" id="occupiedRoomList">
+                <!-- Quartos ocupados serão listados aqui -->
+            </div>
         </div>
 
         <!-- Botão de Editar Quartos -->
@@ -214,6 +249,8 @@
             <option value="4 camas de solteiro">4 camas de solteiro</option>
             <option value="2 camas de casal">2 camas de casal</option>
             <option value="2 de cada">2 de cada (1 de casal e 1 de solteiro)</option>
+            <option value="1 cama de casal">1 cama de casal</option>
+            <option value="1 cama de solteiro">1 cama de solteiro</option>
         </select>
 
         <label for="airConditioning">Ventilador ou Ar-condicionado:</label>
@@ -244,7 +281,7 @@
             roomList.innerHTML = ''; // Limpar quartos existentes
 
             filteredRooms.forEach(room => {
-                if (room.status !== 'ocupado') { // Ignorar quartos ocupados no filtro
+                if (room.status !== 'ocupado') { // Ignorar quartos ocupados
                     const roomElement = document.createElement('div');
                     roomElement.classList.add('quarto');
                     roomElement.innerHTML = `
@@ -264,7 +301,33 @@
             });
         }
 
-        // Alternar o status do quarto
+        // Exibir quartos ocupados
+        function displayOccupiedRooms() {
+            const occupiedRoomList = document.getElementById('occupiedRoomList');
+            occupiedRoomList.innerHTML = ''; // Limpar quartos ocupados existentes
+
+            const occupiedRooms = rooms.filter(room => room.status === 'ocupado');
+
+            occupiedRooms.forEach(room => {
+                const roomElement = document.createElement('div');
+                roomElement.classList.add('quarto');
+                roomElement.innerHTML = `
+                    <h3>Quarto ${room.roomNumber}</h3>
+                    <div class="info-quarto">
+                        <div>Configuração de Camas: ${room.beds}</div>
+                        <div>${room.airConditioning}</div>
+                    </div>
+                    <div class="status">
+                        <button class="ocupado" onclick="toggleStatus(${room.id}, this)">
+                            Ocupado
+                        </button>
+                    </div>
+                `;
+                occupiedRoomList.appendChild(roomElement);
+            });
+        }
+
+        // Alternar status de disponível para ocupado e vice-versa
         function toggleStatus(roomId, button) {
             const room = rooms.find(r => r.id === roomId);
             room.status = room.status === 'disponível' ? 'ocupado' : 'disponível';
@@ -273,45 +336,35 @@
             saveRooms(); // Salvar no localStorage após alteração
         }
 
-        // Mostrar o formulário de edição
-        function showEditForm() {
-            document.getElementById('editRoomForm').style.display = 'block';
+        // Função para aplicar o filtro
+        function applyFilter() {
+            const filterValue = document.getElementById('filterBeds').value;
+
+            let filteredRooms = [];
+            
+            if (filterValue === 'all') {
+                filteredRooms = rooms;
+            } else {
+                filteredRooms = rooms.filter(room => room.beds === filterValue);
+            }
+
+            displayRooms(filteredRooms); // Exibir quartos filtrados
         }
 
-        // Esconder o formulário de edição
-        function hideEditForm() {
-            document.getElementById('editRoomForm').style.display = 'none';
-        }
-
-        // Salvar as alterações no quarto
-        function saveRoom() {
-            const roomNumber = document.getElementById('roomNumber').value;
-            const beds = document.getElementById('beds').value;
-            const airConditioning = document.getElementById('airConditioning').value;
-
-            // Atualizar o quarto
-            const room = rooms.find(r => r.roomNumber == roomNumber);
-            room.beds = beds;
-            room.airConditioning = airConditioning;
-
-            hideEditForm();
-            displayRooms(); // Recarregar os quartos
-            saveRooms(); // Salvar no localStorage após edição
+        // Exibir ou ocultar os quartos ocupados
+        function toggleOccupiedRooms() {
+            const occupiedRoomContainer = document.getElementById('occupiedRoomContainer');
+            if (occupiedRoomContainer.style.display === 'block') {
+                occupiedRoomContainer.style.display = 'none';
+            } else {
+                occupiedRoomContainer.style.display = 'block';
+                displayOccupiedRooms(); // Exibir quartos ocupados
+            }
         }
 
         // Salvar os quartos no localStorage
         function saveRooms() {
             localStorage.setItem('rooms', JSON.stringify(rooms));
-        }
-
-        // Função para aplicar o filtro
-        function applyFilter() {
-            const filterValue = document.getElementById('filterBeds').value;
-            const filteredRooms = filterValue === 'all'
-                ? rooms
-                : rooms.filter(room => room.beds === filterValue);
-
-            displayRooms(filteredRooms); // Exibir quartos filtrados
         }
 
         // Inicializar a página com os quartos
