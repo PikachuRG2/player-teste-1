@@ -213,7 +213,6 @@
                 <option value="2 de cada">2 de cada (1 de casal e 1 de solteiro)</option>
                 <option value="1 cama de casal">1 cama de casal</option>
                 <option value="1 cama de solteiro">1 cama de solteiro</option>
-                <!-- Nova opção adicionada -->
                 <option value="2 camas de solteiro">2 camas de solteiro</option>
             </select>
         </div>
@@ -253,7 +252,6 @@
             <option value="2 de cada">2 de cada (1 de casal e 1 de solteiro)</option>
             <option value="1 cama de casal">1 cama de casal</option>
             <option value="1 cama de solteiro">1 cama de solteiro</option>
-            <!-- Nova opção adicionada -->
             <option value="2 camas de solteiro">2 camas de solteiro</option>
         </select>
 
@@ -263,7 +261,6 @@
             <option value="ar-condicionado">Ar-condicionado</option>
         </select>
 
-        <!-- Novo campo para valor da diária -->
         <label for="dailyRate">Valor da Diária:</label>
         <input type="number" id="dailyRate" placeholder="Valor da Diária" />
 
@@ -309,6 +306,21 @@
                     roomList.appendChild(roomElement);
                 }
             });
+        }
+
+        // Função para aplicar o filtro
+        function applyFilter() {
+            const filterValue = document.getElementById('filterBeds').value;
+
+            let filteredRooms = [];
+
+            if (filterValue === 'all') {
+                filteredRooms = rooms;
+            } else {
+                filteredRooms = rooms.filter(room => room.beds === filterValue);
+            }
+
+            displayRooms(filteredRooms); // Exibir quartos filtrados
         }
 
         // Salvar as alterações no quarto
